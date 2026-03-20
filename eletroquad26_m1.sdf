@@ -21,17 +21,17 @@
     <!-- Gabarito ArUco -->
     <model name='gabarito'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>2 2 0.02 0 0 -90</pose> <!--line 024-->
+      <pose degrees='true'>2 2 0.011 0 0 -90</pose> <!--line 024-->
       <static>true</static>
     </model>
     <model name='aruco'>
       <include merge='true'><uri>models/bouncing/ArUco_marker</uri></include>
-      <pose degrees='true'>2 2 0.021 0 0 -90</pose> <!--line 029-->
+      <pose degrees='true'>2 2 0.012 0 0 -90</pose> <!--line 029-->
       <static>true</static>
     </model>
     <model name='shape0'>
       <include merge='true'><uri>models/bouncing/shapes/hexagon</uri></include> <!--line 033-->
-      <pose degrees='true'>2 2 0.022 0 0 -90</pose> <!--line 034-->
+      <pose degrees='true'>2 2 0.013 0 0 -90</pose> <!--line 034-->
       <static>true</static>
     </model>
     <!-- Gabarito ArUco -->
@@ -39,145 +39,145 @@
     <!-- Plataformas da Prova -->
     <model name='3hexagon'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>-3 5 0.02 0 0 -90</pose> <!--line 042-->
+      <pose degrees='true'>-3 5 0.011 0 0 -90</pose> <!--line 042-->
       <static>true</static>
     </model>
     <model name='shape1'>
       <include merge='true'><uri>models/bouncing/shapes/hexagon</uri></include>
-      <pose degrees='true'>-3 5 0.021 0 0 -90</pose> <!--line 047-->
+      <pose degrees='true'>-3 5 0.012 0 0 -90</pose> <!--line 047-->
       <static>true</static>
     </model>
     <model name='num1'>
       <include merge='true'><uri>models/bouncing/nums/num_3</uri></include>
-      <pose degrees='true'>-3 5 0.02 20 0 -90</pose> <!--line 052-->
+      <pose degrees='true'>-3 5 0.013 20 0 -90</pose> <!--line 052-->
       <static>true</static>
     </model>
 
     <model name='4hexagon'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>1.5 -4 0.02 0 0 -90</pose> <!--line 058-->
+      <pose degrees='true'>1.5 -4 0.011 0 0 -90</pose> <!--line 058-->
       <static>true</static>
     </model>
     <model name='shape2'>
       <include merge='true'><uri>models/bouncing/shapes/hexagon</uri></include>
-      <pose degrees='true'>1.5 -4 0.021 0 0 -90</pose> <!--line 063-->
+      <pose degrees='true'>1.5 -4 0.012 0 0 -90</pose> <!--line 063-->
       <static>true</static>
     </model>
     <model name='num2'>
       <include merge='true'><uri>models/bouncing/nums/num_4</uri></include>
-      <pose degrees='true'>1.5 -4 0.022 0 0 -90</pose> <!--line 068-->
+      <pose degrees='true'>1.5 -4 0.013 0 0 -90</pose> <!--line 068-->
       <static>true</static>
     </model>
 
     <model name='5hexagon'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>1 3.5 0.02 0 0 -90</pose> <!--line 074-->
+      <pose degrees='true'>1 3.5 0.011 0 0 -90</pose> <!--line 074-->
       <static>true</static>
     </model>
     <model name='shape3'>
       <include merge='true'><uri>models/bouncing/shapes/hexagon</uri></include>
-      <pose degrees='true'>1 3.5 0.021 0 0 -90</pose> <!--line 079-->
+      <pose degrees='true'>1 3.5 0.012 0 0 -90</pose> <!--line 079-->
       <static>true</static>
     </model>
     <model name='num3'>
       <include merge='true'><uri>models/bouncing/nums/num_5</uri></include>
-      <pose degrees='true'>1 3.5 0.022 0 0 -90</pose> <!--line 084-->
+      <pose degrees='true'>1 3.5 0.013 0 0 -90</pose> <!--line 084-->
       <static>true</static>
     </model>
 
     <model name='3star'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>-2 -5.5 0.02 0 0 -90</pose> <!--line 090-->
+      <pose degrees='true'>-2 -5.5 0.011 0 0 -90</pose> <!--line 090-->
       <static>true</static>
     </model>
     <model name='shape4'>
       <include merge='true'><uri>models/bouncing/shapes/star</uri></include>
-      <pose degrees='true'>-2 -5.5 0.021 0 0 -90</pose> <!--line 095-->
+      <pose degrees='true'>-2 -5.5 0.012 0 0 -90</pose> <!--line 095-->
       <static>true</static>
     </model>
     <model name='num4'>
       <include merge='true'><uri>models/bouncing/nums/num_3</uri></include>
-      <pose degrees='true'>-2 -5.5 0.022 0 0 -90</pose> <!--line 100-->
+      <pose degrees='true'>-2 -5.5 0.013 0 0 -90</pose> <!--line 100-->
       <static>true</static>
     </model>
 
     <model name='4star'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>4 -1.5 0.02 0 0 -90</pose> <!--line 106-->
+      <pose degrees='true'>-2 -1.7 0.011 0 0 -90</pose> <!--line 106-->
       <static>true</static>
     </model>
     <model name='shape5'>
       <include merge='true'><uri>models/bouncing/shapes/star</uri></include>
-      <pose degrees='true'>4 -1.5 0.021 0 0 -90</pose> <!--line 111-->
+      <pose degrees='true'>-2 -1.7 0.012 0 0 -90</pose> <!--line 111-->
       <static>true</static>
     </model>
     <model name='num5'>
       <include merge='true'><uri>models/bouncing/nums/num_4</uri></include>
-      <pose degrees='true'>4 -1.5 0.022 0 0 -90</pose> <!--line 116-->
+      <pose degrees='true'>-2 -1.7 0.013 0 0 -90</pose> <!--line 116-->
       <static>true</static>
     </model>
 
     <model name='5star'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>-2 2 0.02 0 0 -90</pose> <!--line 122-->
+      <pose degrees='true'>-2 2 0.011 0 0 -90</pose> <!--line 122-->
       <static>true</static>
     </model>
     <model name='shape6'>
       <include merge='true'><uri>models/bouncing/shapes/star</uri></include>
-      <pose degrees='true'>-2 2 0.021 0 0 -90</pose> <!--line 127-->
+      <pose degrees='true'>-2 2 0.012 0 0 -90</pose> <!--line 127-->
       <static>true</static>
     </model>
     <model name='num6'>
       <include merge='true'><uri>models/bouncing/nums/num_5</uri></include>
-      <pose degrees='true'>-2 2 0.022 0 0 -90</pose> <!--line 132-->
+      <pose degrees='true'>-2 2 0.013 0 0 -90</pose> <!--line 132-->
       <static>true</static>
     </model>
 
     <model name='3triangle'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>0 -5 0.02 0 0 -90</pose> <!--line 138-->
+      <pose degrees='true'>0 -5 0.011 0 0 -90</pose> <!--line 138-->
       <static>true</static>
     </model>
     <model name='shape7'>
       <include merge='true'><uri>models/bouncing/shapes/triangle</uri></include>
-      <pose degrees='true'>0 -5 0.021 0 0 -90</pose> <!--line 143-->
+      <pose degrees='true'>0 -5 0.012 0 0 -90</pose> <!--line 143-->
       <static>true</static>
     </model>
     <model name='num7'>
       <include merge='true'><uri>models/bouncing/nums/num_3</uri></include>
-      <pose degrees='true'>0 -5 0.022 0 0 -90</pose> <!--line 148-->
+      <pose degrees='true'>0 -5 0.013 0 0 -90</pose> <!--line 148-->
       <static>true</static>
     </model>
 
     <model name='4triangle'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>2.5 0 0.02 0 0 -90</pose> <!--line 154-->
+      <pose degrees='true'>2.5 0 0.011 0 0 -90</pose> <!--line 154-->
       <static>true</static>
     </model>
     <model name='shape8'>
       <include merge='true'><uri>models/bouncing/shapes/triangle</uri></include>
-      <pose degrees='true'>2.5 0 0.021 0 0 -90</pose> <!--line 159-->
+      <pose degrees='true'>2.5 0 0.012 0 0 -90</pose> <!--line 159-->
       <static>true</static>
     </model>
     <model name='num8'>
       <include merge='true'><uri>models/bouncing/nums/num_4</uri></include>
-      <pose degrees='true'>2.5 0 0.022 0 0 -90</pose> <!--line 164-->
+      <pose degrees='true'>2.5 0 0.013 0 0 -90</pose> <!--line 164-->
       <static>true</static>
     </model>
 
     <model name='5triangle'>
       <include merge='true'><uri>models/miscs/default_platform</uri></include>
-      <pose degrees='true'>3 4.5 0.02 0 0 -90</pose> <!--line 170-->
+      <pose degrees='true'>3 4.5 0.011 0 0 -90</pose> <!--line 170-->
       <static>true</static>
     </model>
     <model name='shape9'>
       <include merge='true'><uri>models/bouncing/shapes/triangle</uri></include>
-      <pose degrees='true'>3 4.5 0.021 0 0 -90</pose> <!--line 175-->
+      <pose degrees='true'>3 4.5 0.012 0 0 -90</pose> <!--line 175-->
       <static>true</static>
     </model>
     <model name='num9'>
       <include merge='true'><uri>models/bouncing/nums/num_5</uri></include>
-      <pose degrees='true'>3 4.5 0.022 0 0 -90</pose> <!--line 180-->
+      <pose degrees='true'>3 4.5 0.013 0 0 -90</pose> <!--line 180-->
       <static>true</static>
     </model>
     <!-- Plataformas da Prova -->
@@ -186,7 +186,7 @@
     <include>
       <uri>models/miscs/takeoff_platform</uri>
       <static>true</static>
-      <pose degrees='true'>0 0 0.01 0 0 0</pose>
+      <pose degrees='true'>0 0 0.011 0 0 0</pose>
     </include>
     <!-- Takeoff -->
     
@@ -194,7 +194,7 @@
     <include>
       <uri>models/miscs/arenas/rectangle</uri>
       <static>true</static>
-      <pose degrees='true'>0 0 0 0 0 0</pose>
+      <pose degrees='true'>0 0 0.01 0 0 0</pose>
     </include>
     <!-- Arena -->
 

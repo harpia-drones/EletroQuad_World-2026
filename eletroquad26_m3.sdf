@@ -57,7 +57,7 @@
     <include>
       <uri>models/miscs/takeoff_platform</uri>
       <static>true</static>
-      <pose degrees='true'>0 0 0.11 0 0 0</pose>
+      <pose degrees='true'>0 0 0.011 0 0 0</pose>
     </include>
     <!-- Takeoff -->
 
@@ -65,7 +65,7 @@
     <include>
       <uri>models/miscs/arenas/rectangle</uri>
       <static>true</static>
-      <pose degrees='true'>0 0 0.1 0 0 0</pose>
+      <pose degrees='true'>0 0 0.01 0 0 0</pose>
     </include>
     <!-- Arena -->
 
