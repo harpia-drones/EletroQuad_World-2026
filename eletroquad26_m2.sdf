@@ -21,7 +21,7 @@
     <!-- Bola pra Marcacao -->
     <model name='styro_ball'>
       <include><uri>models/hang_the_right_wire/styro_ball</uri></include>
-      <pose degrees='true'>2.5 0 1.6 0 0 0</pose> <!--line 24-->
+      <pose degrees='true'>3.23 0 1.6 0 0 0</pose> <!--line 24-->
       <static>true</static>
     </model>
     <!-- Bola pra Marcacao -->
@@ -29,33 +29,33 @@
     <!-- Linhas -->
     <model name='pole1'>
       <include><uri>models/hang_the_right_wire/pole</uri></include>
-      <pose degrees='true'>2.5 2.5 0 0 0 0</pose> <!--line 32-->
+      <pose degrees='true'>3.23 3.23 0.81 0 0 0</pose> <!--line 32-->
       <static>true</static>
     </model>
     <model name='pole2'>
       <include><uri>models/hang_the_right_wire/pole</uri></include>
-      <pose degrees='true'>2.5 -2.5 0 0 0 0</pose> <!--line 37-->
+      <pose degrees='true'>3.23 -3.23 0.81 0 0 0</pose> <!--line 37-->
       <static>true</static>
     </model>
     <model name='hose1'>
       <include><uri>models/hang_the_right_wire/hose</uri></include>
-      <pose degrees='true'>2.5 0 1.6 0 0 0</pose> <!--line 42-->
+      <pose degrees='true'>3.23 0 1.6 -90 0 0</pose> <!--line 42-->
       <static>true</static>
     </model>
 
     <model name='pole3'>
       <include><uri>models/hang_the_right_wire/pole</uri></include>
-      <pose degrees='true'>-2.5 2.5 0 0 0 0</pose> <!--line 48-->
+      <pose degrees='true'>-3.23 3.23 0.81 0 0 0</pose> <!--line 48-->
       <static>true</static>
     </model>
     <model name='pole4'>
       <include><uri>models/hang_the_right_wire/pole</uri></include>
-      <pose degrees='true'>-2.5 -2.5 0 0 0 0</pose> <!--line 53-->
+      <pose degrees='true'>-3.23 -3.23 0.81 0 0 0</pose> <!--line 53-->
       <static>true</static>
     </model>
     <model name='hose2'>
       <include><uri>models/hang_the_right_wire/hose</uri></include>
-      <pose degrees='true'>-2.5 0 1.6 0 0 0</pose> <!--line 58-->
+      <pose degrees='true'>-3.23 0 1.6 -90 0 0</pose> <!--line 58-->
       <static>true</static>
     </model>
     <!-- Linhas -->
@@ -72,7 +72,7 @@
     <include>
       <uri>models/miscs/arenas/circle</uri>
       <static>true</static>
-      <pose degrees='true'>0 0 0 0 0 -90</pose>
+      <pose degrees='true'>0 0 0 0 0 0</pose>
     </include>
     <!-- Arena -->
 

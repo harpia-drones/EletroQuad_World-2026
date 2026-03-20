@@ -12,9 +12,9 @@ arena_length=13
 
 declare -a -r aruco_shapes platform_lines shape_lines num_lines
 aruco_shapes=("hexagon" "star" "triangle")
-platform_lines=("<!--line 024-->" "<!--line 039-->" "<!--line 052-->" "<!--line 065-->" "<!--line 078-->" "<!--line 091-->" "<!--line 104-->" "<!--line 117-->" "<!--line 130-->" "<!--line 143-->")
-shape_lines=("<!--line 028-->" "<!--line 043-->" "<!--line 056-->" "<!--line 069-->" "<!--line 082-->" "<!--line 095-->" "<!--line 108-->" "<!--line 121-->" "<!--line 134-->" "<!--line 147-->")
-num_lines=("<!--line 032-->" "<!--line 047-->" "<!--line 060-->" "<!--line 073-->" "<!--line 086-->" "<!--line 099-->" "<!--line 112-->" "<!--line 125-->" "<!--line 138-->" "<!--line 151-->")
+platform_lines=("<!--line 024-->" "<!--line 042-->" "<!--line 058-->" "<!--line 074-->" "<!--line 090-->" "<!--line 106-->" "<!--line 122-->" "<!--line 138-->" "<!--line 154-->" "<!--line 170-->")
+shape_lines=("<!--line 029-->" "<!--line 047-->" "<!--line 063-->" "<!--line 079-->" "<!--line 095-->" "<!--line 111-->" "<!--line 127-->" "<!--line 143-->" "<!--line 159-->" "<!--line 175-->")
+num_lines=("<!--line 034-->" "<!--line 052-->" "<!--line 068-->" "<!--line 084-->" "<!--line 100-->" "<!--line 116-->" "<!--line 132-->" "<!--line 148-->" "<!--line 164-->" "<!--line 180-->")
 
 # end-variables
 # ======================================================================
@@ -81,7 +81,7 @@ while [ iter -le ((structure_count*${#result_array[@]})) ]; do
   sed -i -n ''\"$(line+4)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
   # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}
   edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}"'
-  sed -i -n ''\"$(line+8)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
+  sed -i -n ''\"$(line+10)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
 
   iter=iter+2
   index=index+1
@@ -96,15 +96,15 @@ sed -i -n ''\"$(line)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
 
 # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}
 edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}"'
-sed -i -n ''\"$(line+4)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
+sed -i -n ''\"$(line+5)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
 
 # <include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 031-->
 edit='echo "<include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 031-->"'
-sed -i -n '31s/'\"$(edit)\"'' eletroquad26_m1.sdf
+sed -i -n '33s/'\"$(edit)\"'' eletroquad26_m1.sdf
 
 # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}
 edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}"'
-sed -i -n ''\"$(line+8)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
+sed -i -n ''\"$(line+10)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
 
 
 # cd /root/PX4-Autopilot/Tools/simulation/gz/worlds/models/bouncing/ArUco_marker/materials/textures

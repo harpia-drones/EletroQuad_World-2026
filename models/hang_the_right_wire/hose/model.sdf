@@ -6,7 +6,7 @@
     <collision name='hose_collision'>
       <geometry><cylinder>
         <radius>0.00635</radius>
-        <length>3</length>
+        <length>6.48</length>
       </cylinder></geometry>
       <surface>
         <friction><ode/></friction>
@@ -17,7 +17,7 @@
     <visual name='hose_visual'>
       <geometry><cylinder>
         <radius>0.00635</radius>
-        <length>3</length>
+        <length>6.48</length>
       </cylinder></geometry>
       <!-- EDITAL -->
       <material><ambient>1 0.3984375 0</ambient><diffuse>1 0.3984375 0</diffuse><specular>1 0.3984375 0</specular></material>
@@ -34,6 +34,5 @@
   </link>
   <self_collide>false</self_collide>
   <static>true</static>
-  
 </model>
 </sdf>

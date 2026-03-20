@@ -5,7 +5,7 @@
     <enable_wind>false</enable_wind>
     <collision name='arena_collision'>
       <geometry><cylinder>
-        <radius>7</radius>
+        <radius>4.5</radius>
         <length>0.001</length>
       </cylinder></geometry>
       <surface>
@@ -16,7 +16,7 @@
     </collision>
     <visual name='arena_visual'>
       <geometry><cylinder>
-        <radius>7</radius>
+        <radius>4.5</radius>
         <length>0.001</length>
       </cylinder></geometry>
       <material>

@@ -27,8 +27,8 @@ max_valid_angle_array=("327" "266" "210" "145" "91")
 # (80,100) = [204,181] ->(+90°)-> [294,271] = |23°|
 
 manometer_value_cap=("20" "40" "60" "80" "100")
-manometer_lines=("<!--line 24-->" "<!--line 33-->" "<!--line 42-->")
-pointer_lines=("<!--line 28-->" "<!--line 37-->" "<!--line 46-->")
+manometer_lines=("<!--line 24-->" "<!--line 35-->" "<!--line 46-->")
+pointer_lines=("<!--line 29-->" "<!--line 40-->" "<!--line 51-->")
 
 declare -a result_array=()
 
@@ -99,7 +99,7 @@ while [ iter -le ((structure_count*${#result_array[@]})) ]; do
   sed -i -n ''\"$(line)\"'s/'\"$(edit)\"'' eletroquad26_m3.sdf
   # <pose degrees='true'>${result_array[iter]}+0.009 ${result_array[iter+1]} 0.861 0 0 ${result_array[iter+2]}</pose> $(pointer_lines[iter])
   edit='echo "<pose degrees='true'>${result_array[iter]}+0.009 ${result_array[iter+1]} 0.861 0 0 ${result_array[iter+2]}</pose> $(pointer_lines[iter])"'
-  sed -i -n ''\"$(line+4)\"'s/'\"$(edit)\"'' eletroquad26_m3.sdf
+  sed -i -n ''\"$(line+5)\"'s/'\"$(edit)\"'' eletroquad26_m3.sdf
 
   iter=iter+4
   line=line+9
