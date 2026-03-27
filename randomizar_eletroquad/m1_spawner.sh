@@ -51,7 +51,7 @@ while :; do
   if [ x*x + y*y -lt min_distance_padding ]; then
     continue # if the euclidean distance from the chosen numbers from the coordinates (0,0) is smaller than the parameter, goes all the way to the beggining
   else
-    if [ ${#result_array[@]} -eq 0 ]; then # checks if the array is empty
+    if [ ${#result_array[@]} -eq 1 ]; then # checks if the array has platforms already
       result_array+=x
       result_array+=y
     else
@@ -64,9 +64,13 @@ while :; do
   iter=iter+2
 done
 
+
+
 # TODO: tratar o 'result_array' pra que ele fique nos conformes do gazebo
 # (x/decimal_places_precision) - (arena_width/2)
 # (y/decimal_places_precision) - (arena_length/2)
+
+
 
 cd /root/PX4-Autopilot/Tools/simulation/gz/worlds
 
@@ -74,14 +78,13 @@ declare -i iter=3 index=0 line=39
 while [ iter -le ((structure_count*${#result_array[@]})) ]; do
 
   # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}
-  edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}"'
-  sed -i -n ''\"$(line)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
+  platform_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}"
   # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}
-  edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}"'
-  sed -i -n ''\"$(line+4)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
+  shape_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}"
   # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}
-  edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}"'
-  sed -i -n ''\"$(line+10)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
+  num_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}"
+
+  sed -i -n "$(line)s|.*|$(platform_edit)" "$(line+5)s|.*|$(shape_edit)" "$(line+10)s|.*|$(num_edit)" eletroquad26_m1.sdf
 
   iter=iter+2
   index=index+1
@@ -91,20 +94,15 @@ done
 # changes the aruco platform
 declare -i line=24
 # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}
-edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}"'
-sed -i -n ''\"$(line)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
-
+platform_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}"
 # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}
-edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}"'
-sed -i -n ''\"$(line+5)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
-
-# <include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 031-->
-edit='echo "<include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 031-->"'
-sed -i -n '33s/'\"$(edit)\"'' eletroquad26_m1.sdf
-
+shape_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}"
+# <include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 033-->
+edit="<include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 033-->"
 # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}
-edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}"'
-sed -i -n ''\"$(line+10)\"'s/'\"$(edit)\"'' eletroquad26_m1.sdf
+num_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}"
+
+sed -i -n "$(line)s|.*|$(platform_edit)" "$(line+5)s|.*|$(shape_edit)" "33s|.*|$(edit)" "$(line+10)s|.*|$(num_edit)" eletroquad26_m1.sdf
 
 
 # cd /root/PX4-Autopilot/Tools/simulation/gz/worlds/models/bouncing/ArUco_marker/materials/textures

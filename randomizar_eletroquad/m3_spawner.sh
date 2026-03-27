@@ -80,8 +80,6 @@ while :; do
   iter=iter+4
 done
 
-cd /root/PX4-Autopilot/Tools/simulation/gz/worlds
-
 
 
 # TODO: tratar o 'result_array' pra que ele fique nos conformes do gazebo
@@ -90,16 +88,18 @@ cd /root/PX4-Autopilot/Tools/simulation/gz/worlds
 
 
 
+cd /root/PX4-Autopilot/Tools/simulation/gz/worlds
+
 while [ iter -le ((structure_count*${#result_array[@]})) ]; do
   # (x, y, YAW, manometer_value_cap)
   local -i iter=0 line=24
  
   # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.86 0 0 -90</pose> $(manometer_lines[iter])
-  edit='echo "<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.86 0 0 -90</pose> $(manometer_lines[iter])"'
-  sed -i -n ''\"$(line)\"'s/'\"$(edit)\"'' eletroquad26_m3.sdf
+  manometer_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.86 0 0 -90</pose> $(manometer_lines[iter])"
   # <pose degrees='true'>${result_array[iter]}+0.009 ${result_array[iter+1]} 0.861 0 0 ${result_array[iter+2]}</pose> $(pointer_lines[iter])
-  edit='echo "<pose degrees='true'>${result_array[iter]}+0.009 ${result_array[iter+1]} 0.861 0 0 ${result_array[iter+2]}</pose> $(pointer_lines[iter])"'
-  sed -i -n ''\"$(line+5)\"'s/'\"$(edit)\"'' eletroquad26_m3.sdf
+  pointer_edit="<pose degrees='true'>${result_array[iter]}+0.009 ${result_array[iter+1]} 0.861 0 0 ${result_array[iter+2]}</pose> $(pointer_lines[iter])"
+  
+  sed -i -n "$(line)s|.*|$(edit)" "$(line+5)s|.*|$(edit)" eletroquad26_m3.sdf
 
   iter=iter+4
   line=line+9
