@@ -49,7 +49,7 @@
     </model>
     <model name='num1'>
       <include merge='true'><uri>models/bouncing/nums/num_3</uri></include>
-      <pose degrees='true'>-3 5 0.013 20 0 -90</pose> <!--line 052-->
+      <pose degrees='true'>-3 5 0.013 0 0 -90</pose> <!--line 052-->
       <static>true</static>
     </model>
 
