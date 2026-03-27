@@ -26,7 +26,7 @@
     </model>
     <model name='pointer1'>
       <include merge='true'><uri>models/faulty_or_not/manometer_pointer</uri></include>
-      <pose degrees='true'>3.009 2 1.711 0 0 0</pose> <!--line 29-->
+      <pose degrees='true'>3.009 2 1.711 0 0 341</pose> <!--line 29-->
       <static>true</static>
     </model>
 
@@ -37,7 +37,7 @@
     </model>
     <model name='pointer2'>
       <include merge='true'><uri>models/faulty_or_not/manometer_pointer</uri></include>
-      <pose degrees='true'>-2.991 5 1.711 0 0 0</pose> <!--line 40-->
+      <pose degrees='true'>-2.991 5 1.711 0 0 218</pose> <!--line 40-->
       <static>true</static>
     </model>
 
@@ -48,7 +48,7 @@
     </model>
     <model name='pointer3'>
       <include merge='true'><uri>models/faulty_or_not/manometer_pointer</uri></include>
-      <pose degrees='true'>-1.991 -5 1.711 0 0 0</pose> <!--line 51-->
+      <pose degrees='true'>-1.991 -5 1.711 0 0 101</pose> <!--line 51-->
       <static>true</static>
     </model>
     <!-- Manometros -->
