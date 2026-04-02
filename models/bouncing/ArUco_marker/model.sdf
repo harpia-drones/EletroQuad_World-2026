@@ -13,7 +13,7 @@
         <specular>1 1 1 1</specular>
       </material>
     </visual>
-    <!--<visual name='ArUco_image'>
+    <visual name='ArUco_image'>
       <geometry><plane>
       <normal>0 0 1</normal>
       <size>0.025 0.025</size>
@@ -29,7 +29,7 @@
           </metal>
         </pbr>
       </material>
-    </visual>-->
+    </visual>
   </link>
   <self_collide>false</self_collide>
   <static>true</static>
