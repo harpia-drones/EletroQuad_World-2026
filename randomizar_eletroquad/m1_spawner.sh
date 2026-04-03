@@ -8,8 +8,8 @@ set -e
 declare -i -r structure_count=10
 declare -i -r decimal_places_precision=1000
 declare -i -r min_distance_padding=60
-declare -i -r half_arena_width=3
-declare -i -r half_arena_length=6
+declare -i -r arena_width=6
+declare -i -r arena_length=12
 declare -i iter=0
 declare -i max_iters=$((2*structure_count))
 
@@ -42,8 +42,8 @@ declare -i iter=0
 
 while [ $iter -lt $max_iters ]; do
 
-  x=$(RNG_within_range 0 $((half_arena_width * decimal_places_precision * 2)))
-  y=$(RNG_within_range 0 $((half_arena_length * decimal_places_precision * 2)))
+  x=$(RNG_within_range 0 $((arena_width * decimal_places_precision)))
+  y=$(RNG_within_range 0 $((arena_length * decimal_places_precision)))
 
   # evita proximidade com origem
   if [ $((x*x + y*y)) -lt $((min_distance_padding * decimal_places_precision)) ]; then
@@ -89,8 +89,8 @@ until [ $iter -ge ${#result_array[@]} ]; do
   # echo "${result_array[$((iter))]} index $iter before normalization"
   # echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
 
-  result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$iter]} / $decimal_places_precision) - $half_arena_width}")
-  result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$((iter+1))]} / $decimal_places_precision) - $half_arena_length}")
+  result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$iter]} / $decimal_places_precision) - ($arena_width/2)}")
+  result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$((iter+1))]} / $decimal_places_precision) - ($arena_length/2)}")
   
   # uncomment to see results
   # echo "${result_array[$((iter))]} index $iter after normalization"
