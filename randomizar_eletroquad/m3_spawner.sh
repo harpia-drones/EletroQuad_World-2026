@@ -134,7 +134,7 @@ while [ $index_struct -lt $structure_count ]; do
   x_offset=$(mawk "BEGIN {printf \"%.4f\", $x + 0.009}")
   pointer_edit="<pose degrees='true'>$x_offset $y 0.861 0 0 $yaw</pose> ${pointer_lines[$index_struct]}"
 
-  sed -i -n -e "${line}s|.*|${manometer_edit}|" -e "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
+  sed -i -e "${line}s|.*|${manometer_edit}|" -e "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
 
   iter=$((iter+4))
   line=$((line+11))
