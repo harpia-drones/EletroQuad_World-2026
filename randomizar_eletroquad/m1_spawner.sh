@@ -1,112 +1,144 @@
 #!/bin/bash
+set -e
 
-# start-variables
+# =========================
+# VARIABLES
+# =========================
 
-declare -i -r structure_count decimal_places_precision min_distance_padding max_iters arena_width arena_length
-structure_count=10
-decimal_places_precision=1000
-min_distance_padding=1
-max_iters=((2*structure_count+1))
-arena_width=7
-arena_length=13
+declare -i -r structure_count=10
+declare -i -r decimal_places_precision=1000
+declare -i -r min_distance_padding=2
+declare -i -r max_distance_padding=63
+declare -i -r arena_width=7
+declare -i -r arena_length=13
+declare -i max_iters=$((2*structure_count))
 
-declare -a -r aruco_shapes platform_lines shape_lines num_lines
-aruco_shapes=("hexagon" "star" "triangle")
-platform_lines=("<!--line 024-->" "<!--line 042-->" "<!--line 058-->" "<!--line 074-->" "<!--line 090-->" "<!--line 106-->" "<!--line 122-->" "<!--line 138-->" "<!--line 154-->" "<!--line 170-->")
-shape_lines=("<!--line 029-->" "<!--line 047-->" "<!--line 063-->" "<!--line 079-->" "<!--line 095-->" "<!--line 111-->" "<!--line 127-->" "<!--line 143-->" "<!--line 159-->" "<!--line 175-->")
-num_lines=("<!--line 034-->" "<!--line 052-->" "<!--line 068-->" "<!--line 084-->" "<!--line 100-->" "<!--line 116-->" "<!--line 132-->" "<!--line 148-->" "<!--line 164-->" "<!--line 180-->")
+declare -a -r aruco_shapes=("hexagon" "star" "triangle")
+declare -a -r platform_lines=("<!--line 024-->" "<!--line 042-->" "<!--line 058-->" "<!--line 074-->" "<!--line 090-->" "<!--line 106-->" "<!--line 122-->" "<!--line 138-->" "<!--line 154-->" "<!--line 170-->")
+declare -a -r shape_lines=("<!--line 029-->" "<!--line 047-->" "<!--line 063-->" "<!--line 079-->" "<!--line 095-->" "<!--line 111-->" "<!--line 127-->" "<!--line 143-->" "<!--line 159-->" "<!--line 175-->")
+declare -a -r num_lines=("<!--line 034-->" "<!--line 052-->" "<!--line 068-->" "<!--line 084-->" "<!--line 100-->" "<!--line 116-->" "<!--line 132-->" "<!--line 148-->" "<!--line 164-->" "<!--line 180-->")
+declare -a result_array=()
 
-# end-variables
-# ======================================================================
-# start-functions
+# =========================
+# FUNCTIONS
+# =========================
 
 RNG_within_range() {
-  local -i min max
-  min=$1
-  max=$2
+  local min=$1
+  local max=$2
 
-  if [ min -lt max ]; then
-    return_val=$(((min + 1) + $RANDOM % max))
+  if [ "$min" -lt "$max" ]; then
+    echo $((min + $RANDOM % (max - min + 1)))
   else
-    return_val=$(((max + 1) + $RANDOM % min))
+    echo $((max + $RANDOM % (min - max + 1)))
   fi
-  echo $return_val
 }
 
-# end-functions
-# ======================================================================
-# start-script
+# =========================
+# GENERATE POINTS
+# =========================
 
-# chooses the shape for the ArUco marker
-result_array+=$(aruco_shapes[$(RNG_within_range 0 2)])
+iter=0
 
-# positions all of the platforms everywhere
-declare -i x y iter=1
-while :; do
-  if [ iter -eq max_iters ]; then
-    break
+while [ $iter -lt $max_iters ]; do
+
+  x=$(RNG_within_range 0 $((arena_width * decimal_places_precision)))
+  y=$(RNG_within_range 0 $((arena_length * decimal_places_precision)))
+
+  # evita proximidade com origem
+  if [ $((x*x + y*y)) -lt $((min_distance_padding * decimal_places_precision)) ]; then
+    continue
   fi
-  x=$(RNG_within_range 0 $((arena_width*min_distance_padding*decimal_places_precision)))
-  y=$(RNG_within_range 0 $((arena_length*min_distance_padding*decimal_places_precision)))
-  if [ x*x + y*y -lt min_distance_padding*decimal_places_precision ]; then
-    continue # if the euclidean distance from the chosen numbers from the coordinates (0,0) is smaller than the parameter, goes all the way to the beggining
-  else
-    if [ ${#result_array[@]} -eq 1 ]; then # checks if the array has platforms already
-      result_array+=$((x-arena_width*decimal_places_precision))
-      result_array+=$((y-arena_length*decimal_places_precision))
-    else
-      until [ $(((x-$(result_array[iter]))*(x-$(result_array[iter])) + (y-$(result_array[iter+1]))*(y-$(result_array[iter+1])))) -ge min_distance_padding*decimal_places_precision ]; do
 
-        x=$(RNG_within_range 0 ((arena_width*min_distance_padding*decimal_places_precision)))
-        y=$(RNG_within_range 0 ((arena_length*min_distance_padding*decimal_places_precision)))
-      done
-      result_array+=((x-arena_width*decimal_places_precision))
-      result_array+=((y-arena_length*decimal_places_precision))
+  # valida distância com pontos anteriores
+  valid=1
+  index=0
+  while [ $index -lt ${#result_array[@]} ]; do
+    dx=$((x - result_array[index]))
+    dy=$((y - result_array[index+1]))
+    dist=$((dx*dx + dy*dy))
+
+    if [ $dist -lt $((min_distance_padding * decimal_places_precision)) ] && [ $dist -ge $((max_distance_padding * decimal_places_precision)) ]; then
+      valid=0
+      break
     fi
+    index=$((index+4))
+  done
+
+  if [ $valid -eq 0 ]; then
+    continue
   fi
-  iter=iter+2
+
+  # salva posição (centralizada)
+  result_array+=($((x - (arena_width * decimal_places_precision / 2))))
+  result_array+=($((y - (arena_length * decimal_places_precision / 2))))
+  
+  # uncomment to see results
+  # echo "${result_array[$((iter))]} x coord"
+  # echo -e "${result_array[$((iter+1))]} y coord\n"
+
+  iter=$((iter+2))
 done
 
-while [ iter -le ${#result_array[@]} ]
-  result_array[iter]=$(mawk "BEGIN {printf \".4f\", $result_array[iter] / $decimal_places_precision}")
-  # new_result=$(mawk "BEGIN {printf \".4f\", $result_array[iter] / $decimal_places_precision}")
-  # result_array[iter]=new_result
+# =========================
+# NORMALIZA VALORES
+# =========================
+declare -i iter=0
+
+until [ $iter -ge ${#result_array[@]} ]; do
+
+  # uncomment to see results
+  # echo "${result_array[$((iter))]} index $iter before normalization"
+  result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$iter]} / $decimal_places_precision}")
+  # echo -e "${result_array[$((iter))]} index $iter after normalization\n"
+
+  iter=$((iter+1))
 done
+
+# =========================
+# EDIT SDF
+# =========================
 
 cd /root/PX4-Autopilot/Tools/simulation/gz/worlds
 
-declare -i iter=3 index=0 line=39
-while [ iter -le ((structure_count*${#result_array[@]})) ]; do
+iter=0
+line=39
+index_struct=0
 
-  # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}
+while [ $index_struct -lt $structure_count ]; do
+
   platform_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}"
-  # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}
   shape_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}"
-  # <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}
   num_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}"
 
-  sed -i -n "$(line)s|.*|$(platform_edit)" "$(line+5)s|.*|$(shape_edit)" "$(line+10)s|.*|$(num_edit)" eletroquad26_m1.sdf
+  sed -i -n -e "${line}s|.*|${platform_edit}|" -e "$((line+5))s|.*|${shape_edit}|" -e "$((line+10))s|.*|${num_edit}|" eletroquad26_m1.sdf
 
-  iter=iter+2
-  index=index+1
-  line=line+13
+  iter=$((iter+2))
+  line=$((line+18))
+  index_struct=$((index_struct+1))
+
 done
 
 # changes the aruco platform
 declare -i line=24
-# <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}
 platform_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.02 0 0 -90</pose> ${platform_lines[index]}"
-# <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}
 shape_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.021 0 0 -90</pose> ${shape_lines[index]}"
-# <include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 033-->
-edit="<include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 033-->"
-# <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}
+aruco_edit="<include merge='true'><uri>models/bouncing/shapes/${result_array[0]}</uri></include> <!--line 033-->"
 num_edit="<pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.022 0 0 -90</pose> ${num_lines[index]}"
 
-sed -i -n "$(line)s|.*|$(platform_edit)" "$(line+5)s|.*|$(shape_edit)" "33s|.*|$(edit)" "$(line+10)s|.*|$(num_edit)" eletroquad26_m1.sdf
+sed -i -n -e "${line}s|.*|${platform_edit}|" -e "$((line+5))s|.*|${shape_edit}|" -e "$((line+9))s|.*|${aruco_edit}|" -e "$((line+10))s|.*|${num_edit}|" eletroquad26_m1.sdf
 
+# creates the actual aruco marker
+python3 << 'EOF'
+import random
+import cv2
+import os
+abs_path = "/root/PX4-Autopilot/Tools/simulation/gz/worlds/models/bouncing/ArUco_marker/materials/textures"
+try:
+  os.makedirs(abs_path, exist_ok=True)
+  cv2.imwrite(os.path.join(abs_path, f"aruco_sample.png"), cv2.aruco.generateImageMarker(cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_1000), random.randint(3,5), 250))
+except Exception as e:
+  print(f"Erro ao gerar ArUco: {e}")
+EOF
 
-# cd /root/PX4-Autopilot/Tools/simulation/gz/worlds/models/bouncing/ArUco_marker/materials/textures
-
-
-echo "This script took $SECONDS to run."
+echo "The randomizing script took $SECONDS seconds to run."
