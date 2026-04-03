@@ -10,7 +10,8 @@ declare -i -r decimal_places_precision=1000
 declare -i -r min_distance_padding=20
 declare -i -r arena_width=6
 declare -i -r arena_length=12
-declare -i max_iters=$((4*structure_count))
+declare -i -r tuple_size=4
+declare -i max_iters=$((tuple_size*structure_count))
 
 declare -a -r min_valid_angle_array=("0" "297" "231" "176" "114")
 declare -a -r max_valid_angle_array=("327" "266" "210" "145" "91")
@@ -38,7 +39,7 @@ RNG_within_range() {
 # GENERATE POINTS
 # =========================
 
-iter=0
+declare -i iter=0
 
 while [ $iter -lt $max_iters ]; do
 
@@ -62,7 +63,7 @@ while [ $iter -lt $max_iters ]; do
       valid=0
       break
     fi
-    index=$((index+4))
+    index=$((index+tuple_size))
   done
 
   if [ $valid -eq 0 ]; then
@@ -78,7 +79,7 @@ while [ $iter -lt $max_iters ]; do
 
   # value cap
   result_array+=(${manometer_value_cap[$interval_chosen]})
-  # result_array+=(${manometer_value_cap[$(RNG_within_range 0 4)]})
+  # result_array+=(${manometer_value_cap[$(RNG_within_range 0 4tuple_size)]})
   
   # uncomment to check results
   # echo "${result_array[$((iter))]} x coord"
@@ -86,13 +87,14 @@ while [ $iter -lt $max_iters ]; do
   # echo "${result_array[$((iter+2))]} pointer angle"
   # echo -e "${result_array[$((iter+3))]} manometer value cap\n"
 
-  iter=$((iter+4))
+  iter=$((iter+tuple_size))
 done
 
 # =========================
 # NORMALIZA VALORES
 # =========================
-declare -i iter=0
+
+iter=0
 
 until [ $iter -ge ${#result_array[@]} ]; do
 
@@ -107,7 +109,7 @@ until [ $iter -ge ${#result_array[@]} ]; do
   # echo "${result_array[$((iter))]} index $iter after normalization"
   # echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
 
-  iter=$((iter+4))
+  iter=$((iter+tuple_size))
 done
 
 # =========================
@@ -133,7 +135,7 @@ while [ $index_struct -lt $structure_count ]; do
 
   sed -i -e "${line}s|.*|${manometer_edit}|" -e "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
 
-  iter=$((iter+4))
+  iter=$((iter+tuple_size))
   line=$((line+11))
   index_struct=$((index_struct+1))
 
