@@ -7,8 +7,7 @@ set -e
 
 declare -i -r structure_count=3
 declare -i -r decimal_places_precision=1000
-declare -i -r min_distance_padding=5
-declare -i -r max_distance_padding=60
+declare -i -r min_distance_padding=20
 declare -i -r arena_width=6
 declare -i -r arena_length=12
 declare -i max_iters=$((4*structure_count))
@@ -52,21 +51,21 @@ while [ $iter -lt $max_iters ]; do
   fi
 
   # valida distância com pontos anteriores
-  valid=0
+  valid=1
   index=0
   while [ $index -lt ${#result_array[@]} ]; do
     dx=$((x - result_array[index]))
     dy=$((y - result_array[index+1]))
     dist=$((dx*dx + dy*dy))
 
-    if [ $dist -gt $((min_distance_padding * decimal_places_precision)) ] && [ $dist -le $((max_distance_padding * decimal_places_precision)) ]; then
-      valid=1
+    if [ $dist -gt $((min_distance_padding * decimal_places_precision)) ]; then
+      valid=0
       break
     fi
     index=$((index+4))
   done
 
-  if [ $valid -eq 1 ]; then
+  if [ $valid -eq 0 ]; then
     continue
   fi
 
