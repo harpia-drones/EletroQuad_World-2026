@@ -58,7 +58,7 @@ while [ $iter -lt $max_iters ]; do
     dy=$((y - result_array[index+1]))
     dist=$((dx*dx + dy*dy))
 
-    if [ $dist -gt $((min_distance_padding * decimal_places_precision)) ]; then
+    if [ $dist -le $((min_distance_padding * decimal_places_precision)) ]; then
       valid=0
       break
     fi
