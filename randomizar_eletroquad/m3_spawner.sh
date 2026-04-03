@@ -7,8 +7,8 @@ set -e
 
 declare -i -r structure_count=3
 declare -i -r decimal_places_precision=1000
-declare -i -r min_distance_padding=2
-declare -i -r max_distance_padding=63
+declare -i -r min_distance_padding=5
+declare -i -r max_distance_padding=60
 declare -i -r arena_width=7
 declare -i -r arena_length=13
 declare -i max_iters=$((4*structure_count))
@@ -52,27 +52,25 @@ while [ $iter -lt $max_iters ]; do
   fi
 
   # valida distância com pontos anteriores
-  valid=1
+  valid=0
   index=0
   while [ $index -lt ${#result_array[@]} ]; do
     dx=$((x - result_array[index]))
     dy=$((y - result_array[index+1]))
     dist=$((dx*dx + dy*dy))
 
-    if [ $dist -lt $((min_distance_padding * decimal_places_precision)) ] && [ $dist -ge $((max_distance_padding * decimal_places_precision)) ]; then
-      valid=0
+    if [ $dist -gt $((min_distance_padding * decimal_places_precision)) ] && [ $dist -le $((max_distance_padding * decimal_places_precision)) ]; then
+      valid=1
       break
     fi
     index=$((index+4))
   done
 
-  if [ $valid -eq 0 ]; then
+  if [ $valid -eq 1 ]; then
     continue
   fi
 
-  # salva posição (centralizada)
-  result_array+=($((x - (arena_width * decimal_places_precision / 2))))
-  result_array+=($((y - (arena_length * decimal_places_precision / 2))))
+  result_array+=($x $y)
 
   # ângulo
   interval_chosen=$(RNG_within_range 1 4)
@@ -84,10 +82,10 @@ while [ $iter -lt $max_iters ]; do
   # result_array+=(${manometer_value_cap[$(RNG_within_range 0 4)]})
   
   # uncomment to check results
-  # echo "${result_array[$((iter))]} x coord"
-  # echo "${result_array[$((iter+1))]} y coord"
-  # echo "${result_array[$((iter+2))]} pointer angle"
-  # echo -e "${result_array[$((iter+3))]} manometer value cap\n"
+  echo "${result_array[$((iter))]} x coord"
+  echo "${result_array[$((iter+1))]} y coord"
+  echo "${result_array[$((iter+2))]} pointer angle"
+  echo -e "${result_array[$((iter+3))]} manometer value cap\n"
 
   iter=$((iter+4))
 done
@@ -100,15 +98,15 @@ declare -i iter=0
 until [ $iter -ge ${#result_array[@]} ]; do
 
   # uncomment to check results
-  # echo "${result_array[$((iter))]} index $iter before normalization"
-  # echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
+  echo "${result_array[$((iter))]} index $iter before normalization"
+  echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
 
-  result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$iter]} / $decimal_places_precision}")
-  result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$((iter+1))]} / $decimal_places_precision}")
+  result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$iter]} / $decimal_places_precision) - ($arena_width/2)}")
+  result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$((iter+1))]} / $decimal_places_precision) - ($arena_length/2)}")
   
   # uncomment to check results
-  # echo "${result_array[$((iter))]} index $iter after normalization"
-  # echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
+  echo "${result_array[$((iter))]} index $iter after normalization"
+  echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
 
   iter=$((iter+4))
 done
@@ -132,7 +130,7 @@ while [ $index_struct -lt $structure_count ]; do
   manometer_edit="        <pose degrees='true'>$x $y 0.86 0 0 -90</pose> ${manometer_lines[$index_struct]}"
 
   x_offset=$(mawk "BEGIN {printf \"%.4f\", $x + 0.009}")
-  pointer_edit="        <pose degrees='true'>$x_offset $y 0.861 0 0 $yaw</pose> ${pointer_lines[$index_struct]}"
+  pointer_edit="        <pose degrees='true'>$x_offset $y 1.711 0 0 $yaw</pose> ${pointer_lines[$index_struct]}"
 
   sed -i -e "${line}s|.*|${manometer_edit}|" -e "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
 
