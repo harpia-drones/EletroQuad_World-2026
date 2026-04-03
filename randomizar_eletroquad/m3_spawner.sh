@@ -9,8 +9,8 @@ declare -i -r structure_count=3
 declare -i -r decimal_places_precision=1000
 declare -i -r min_distance_padding=5
 declare -i -r max_distance_padding=60
-declare -i -r arena_width=7
-declare -i -r arena_length=13
+declare -i -r arena_width=6
+declare -i -r arena_length=12
 declare -i max_iters=$((4*structure_count))
 
 declare -a -r min_valid_angle_array=("0" "297" "231" "176" "114")
