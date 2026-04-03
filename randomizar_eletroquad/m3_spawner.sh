@@ -198,4 +198,4 @@ cd /root/harpia_ws
 colcon build --packages-up-to eletroquad_m3
 source /root/.bashrc
 
-echo "This script took $SECONDS to run."
+echo "The randomizing script took $SECONDS seconds to run."
