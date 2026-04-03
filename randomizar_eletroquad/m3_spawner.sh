@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+
 # =========================
 # VARIABLES
 # =========================
@@ -19,6 +20,23 @@ declare -a -r manometer_value_cap=("20" "40" "60" "80" "100")
 declare -a -r manometer_lines=("<!--line 24-->" "<!--line 35-->" "<!--line 46-->")
 declare -a -r pointer_lines=("<!--line 29-->" "<!--line 40-->" "<!--line 51-->")
 declare -a result_array=()
+
+
+if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && tput colors >/dev/null 2>&1; then
+  RED='\033[31;1m'
+  YELLOW='\033[33;1m'
+  YELLOW_BG='\033[33;7m'
+  GREEN='\033[92;1m'
+  NC='\033[0m'
+
+else
+  RED=''
+  YELLOW=''
+  YELLOW_BG=''
+  GREEN=''
+  NC=''
+fi
+
 
 # =========================
 # FUNCTIONS
@@ -47,7 +65,7 @@ while [ $iter -lt $max_iters ]; do
   y=$(RNG_within_range 0 $((arena_length * decimal_places_precision)))
 
   # evita proximidade com origem
-  if [ $((x*x + y*y)) -lt $((min_distance_padding * decimal_places_precision)) ]; then
+  if [ $((x*x + y*y)) -lt $((min_distance_padding * decimal_places_precision * decimal_places_precision)) ]; then
     continue
   fi
 
@@ -59,7 +77,7 @@ while [ $iter -lt $max_iters ]; do
     dy=$((y - result_array[index+1]))
     dist=$((dx*dx + dy*dy))
 
-    if [ $dist -le $((min_distance_padding * decimal_places_precision)) ]; then
+    if [ $dist -le $((min_distance_padding * decimal_places_precision * decimal_places_precision)) ]; then
       valid=0
       break
     fi
@@ -78,14 +96,7 @@ while [ $iter -lt $max_iters ]; do
   result_array+=($((angle % 360)))
 
   # value cap
-  result_array+=(${manometer_value_cap[$interval_chosen]})
-  # result_array+=(${manometer_value_cap[$(RNG_within_range 0 4tuple_size)]})
-  
-  # uncomment to check results
-  # echo "${result_array[$((iter))]} x coord"
-  # echo "${result_array[$((iter+1))]} y coord"
-  # echo "${result_array[$((iter+2))]} pointer angle"
-  # echo -e "${result_array[$((iter+3))]} manometer value cap\n"
+  result_array+=(${manometer_value_cap[$(RNG_within_range 0 4)]})
 
   iter=$((iter+tuple_size))
 done
@@ -98,16 +109,8 @@ iter=0
 
 until [ $iter -ge ${#result_array[@]} ]; do
 
-  # uncomment to check results
-  # echo "${result_array[$((iter))]} index $iter before normalization"
-  # echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
-
   result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$iter]} / $decimal_places_precision) - ($arena_width/2)}")
   result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$((iter+1))]} / $decimal_places_precision) - ($arena_length/2)}")
-  
-  # uncomment to check results
-  # echo "${result_array[$((iter))]} index $iter after normalization"
-  # echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
 
   iter=$((iter+tuple_size))
 done
@@ -115,8 +118,6 @@ done
 # =========================
 # EDIT SDF
 # =========================
-
-cd /root/PX4-Autopilot/Tools/simulation/gz/worlds
 
 iter=0
 line=24
@@ -133,7 +134,7 @@ while [ $index_struct -lt $structure_count ]; do
   x_offset=$(mawk "BEGIN {printf \"%.4f\", $x + 0.009}")
   pointer_edit="        <pose degrees='true'>$x_offset $y 1.711 0 0 $yaw</pose> ${pointer_lines[$index_struct]}"
 
-  sed -i -e "${line}s|.*|${manometer_edit}|" -e "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
+  sed -i -e "${line}s|.*|${manometer_edit}|" -e "$((line+5))s|.*|${pointer_edit}|" /root/PX4-Autopilot/Tools/simulation/gz/worlds/eletroquad26_m3.sdf
 
   iter=$((iter+tuple_size))
   line=$((line+11))
@@ -145,56 +146,25 @@ done
 # YAML OUTPUT
 # =========================
 
-cat << EOF > /root/harpia_ws/src/eletroquad_m3/config/params.yaml
-state_machine:
-  ros__parameters:
-    manometer_1_position: [${result_array[0]}, ${result_array[1]}, -1.7]
-    manometer_1_valuecap: ${result_array[3]}
-    manometer_2_position: [${result_array[4]}, ${result_array[5]}, -1.7]
-    manometer_2_valuecap: ${result_array[7]}
-    manometer_3_position: [${result_array[8]}, ${result_array[9]}, -1.7]
-    manometer_3_valuecap: ${result_array[11]}
-    read_wait_sec: 5.0
-    image_detection_input_topic: '/manometer/processed_image'
-    detection_input_topic: '/manometer/detections'
-    classification_input_topic: '/manometer/classification'
-    alarm_output_topic: '/ring_alarm'
+edit1="    manometer_1_position: [${result_array[0]}, ${result_array[1]}, -1.7]"
+edit2="    manometer_1_valuecap: ${result_array[3]}|"
+edit3="    manometer_2_position: [${result_array[4]}, ${result_array[5]}, -1.7]"
+edit4="    manometer_2_valuecap: ${result_array[7]}|"
+edit5="    manometer_3_position: [${result_array[8]}, ${result_array[9]}, -1.7]"
+edit6="    manometer_3_valuecap: ${result_array[11]}"
 
-vision:
-  ros__parameters:
-    model_detection: 'manometerDetector(last).onnx'
-    model_value_classification: 'manometerClass(last).onnx'
-    model_readability_classification: 'manometerLegivel(best).onnx'
-    confidence_threshold: 0.90
-    color_img_input_topic: 'camera/down/color/image_raw'
-    processed_img_output_topic: '/manometer/processed_image'
-    detection_output_topic: '/manometer/detections'
-    classification_output_topic: '/manometer/classification'
-
-detector:
-  ros__parameters:
-    model_detection: 'manometerDetector(last).onnx'
-    confidence_threshold: 0.90
-    color_img_input_topic: 'camera/down/color/image_raw'
-    processed_img_output_topic: '/manometer/processed_image'
-    detection_output_topic: '/manometer/detections'
-    detection_cropped_output_topic: '/manometer/detection_cropped'
-
-classifier:
-  ros__parameters:
-    model_value_classification: 'manometerClass(last).onnx'
-    model_readability_classification: 'manometerLegivel(best).onnx'
-    confidence_threshold: 0.90
-    detection_cropped_input_topic: '/manometer/detection_cropped'
-    classification_output_topic: '/manometer/classification'
-EOF
+sed -i -e "3s|.*|${edit1}|" -e "4s|.*|${edit2}|" -e "5s|.*|${edit3}|" -e "6s|.*|${edit4}|" -e "7s|.*|${edit5}|" -e "8s|.*|${edit6}|" /root/harpia_ws/src/eletroquad_m3/config/params.yaml
 
 # =========================
 # BUILD
 # =========================
 
+echo -e "${YELLOW}Calculando novas posições...${NC}"
+echo -e "${YELLOW}Modificando arquivos...${NC}"
+echo -e "${YELLOW}Construindo pacotes...${NC}"
 cd /root/harpia_ws
 colcon build --packages-up-to eletroquad_m3
 source /root/.bashrc
+echo -e "${GREEN}Posições dos manômeros randomizadas com sucesso!${NC}"
 
-echo "The randomizing script took $SECONDS seconds to run."
+echo -e "Este script demorou ${GREEN}$SECONDS segundos${NC} para concluir."

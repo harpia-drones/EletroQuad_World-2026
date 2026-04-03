@@ -46,14 +46,14 @@ while [ $iter -lt $max_iters ]; do
   y=$(RNG_within_range 0 $((arena_length * decimal_places_precision)))
 
   # evita proximidade com origem
-  if [ $((x*x + y*y)) -lt $((min_distance_padding * decimal_places_precision)) ]; then
+  if [ $((x*x + y*y)) -le $((min_distance_padding * decimal_places_precision)) ]; then
     continue
   fi
 
   # valida distância com pontos anteriores
   valid=1
   index=0
-  until [ $index -eq ${#result_array[@]} ]; do
+  while [ $index -le ${#result_array[@]} ]; do
     dx=$((x - result_array[index]))
     dy=$((y - result_array[index+1]))
     dist=$((dx*dx + dy*dy))
@@ -86,16 +86,8 @@ iter=0
 
 until [ $iter -ge ${#result_array[@]} ]; do
 
-  # uncomment to see results
-  # echo "${result_array[$((iter))]} index $iter before normalization"
-  # echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
-
   result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$iter]} / $decimal_places_precision) - ($arena_width/2)}")
   result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$((iter+1))]} / $decimal_places_precision) - ($arena_length/2)}")
-  
-  # uncomment to see results
-  # echo "${result_array[$((iter))]} index $iter after normalization"
-  # echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
 
   iter=$((iter+tuple_size))
 done
@@ -103,8 +95,6 @@ done
 # =========================
 # EDIT SDF
 # =========================
-
-cd /root/PX4-Autopilot/Tools/simulation/gz/worlds
 
 iter=0
 index_struct=0
@@ -116,7 +106,7 @@ while [ $index_struct -lt $((structure_count-1)) ]; do
   shape_edit="        <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.012 0 0 -90</pose> ${shape_lines[index_struct]}"
   num_edit="        <pose degrees='true'>${result_array[iter]} ${result_array[iter+1]} 0.013 0 0 -90</pose> ${num_lines[index_struct]}"
 
-  sed -i -e "${lines}s|.*|${platform_edit}|" -e "$((lines+5))s|.*|${shape_edit}|" -e "$((lines+10))s|.*|${num_edit}|" eletroquad26_m1.sdf
+  sed -i -e "${lines}s|.*|${platform_edit}|" -e "$((lines+5))s|.*|${shape_edit}|" -e "$((lines+10))s|.*|${num_edit}|" /root/PX4-Autopilot/Tools/simulation/gz/worlds/eletroquad26_m1.sdf
 
   iter=$((iter+tuple_size))
   lines=$((lines+16))
@@ -133,14 +123,14 @@ shape_edit="        <pose degrees='true'>${result_array[-2]} ${result_array[-1]}
 aruco_edit="      <include merge='true'><uri>models/bouncing/shapes/${aruco_shapes[$((aruco_id-3))]}</uri></include> <!--line 033-->"
 num_edit="        <pose degrees='true'>${result_array[-2]} ${result_array[-1]} 0.013 0 0 -90</pose> <!--line 034-->"
 
-sed -i -e "${line}s|.*|${platform_edit}|" -e "$((line+5))s|.*|${shape_edit}|" -e "$((line+9))s|.*|${aruco_edit}|" -e "$((line+10))s|.*|${num_edit}|" eletroquad26_m1.sdf
+sed -i -e "${line}s|.*|${platform_edit}|" -e "$((line+5))s|.*|${shape_edit}|" -e "$((line+9))s|.*|${aruco_edit}|" -e "$((line+10))s|.*|${num_edit}|" /root/PX4-Autopilot/Tools/simulation/gz/worlds/eletroquad26_m1.sdf
 
 # creates the actual aruco marker
 python3 << EOF
 import random
 import cv2
 import os
-abs_path = "/root/PX4-Autopilot/Tools/simulation/gz/worlds/models/bouncing/ArUco_marker/materials/textures"
+abs_path = "/root/PX4-Autopilot/Tools/simulation/gz/worlds/models/eletroquad_26/bouncing/ArUco_marker/materials/textures"
 try:
   os.makedirs(abs_path, exist_ok=True)
   cv2.imwrite(os.path.join(abs_path, f"aruco_sample.png"), cv2.aruco.generateImageMarker(cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_1000), $aruco_id, 250))
