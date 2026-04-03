@@ -11,7 +11,7 @@ declare -i -r min_distance_padding=60
 declare -i -r arena_width=6
 declare -i -r arena_length=12
 declare -i -r tuple_size=2
-declare -i max_iters=$((2*structure_count))
+declare -i max_iters=$((tuple_size*structure_count))
 
 declare -a -r aruco_shapes=("hexagon" "star" "triangle")
 declare -a -r platform_lines=("<!--line 042-->" "<!--line 058-->" "<!--line 074-->" "<!--line 090-->" "<!--line 106-->" "<!--line 122-->" "<!--line 138-->" "<!--line 154-->" "<!--line 170-->")
