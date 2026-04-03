@@ -81,10 +81,10 @@ while [ $iter -lt $max_iters ]; do
   # result_array+=(${manometer_value_cap[$(RNG_within_range 0 4)]})
   
   # uncomment to check results
-  echo "${result_array[$((iter))]} x coord"
-  echo "${result_array[$((iter+1))]} y coord"
-  echo "${result_array[$((iter+2))]} pointer angle"
-  echo -e "${result_array[$((iter+3))]} manometer value cap\n"
+  # echo "${result_array[$((iter))]} x coord"
+  # echo "${result_array[$((iter+1))]} y coord"
+  # echo "${result_array[$((iter+2))]} pointer angle"
+  # echo -e "${result_array[$((iter+3))]} manometer value cap\n"
 
   iter=$((iter+4))
 done
@@ -97,15 +97,15 @@ declare -i iter=0
 until [ $iter -ge ${#result_array[@]} ]; do
 
   # uncomment to check results
-  echo "${result_array[$((iter))]} index $iter before normalization"
-  echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
+  # echo "${result_array[$((iter))]} index $iter before normalization"
+  # echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
 
   result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$iter]} / $decimal_places_precision) - ($arena_width/2)}")
   result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", (${result_array[$((iter+1))]} / $decimal_places_precision) - ($arena_length/2)}")
   
   # uncomment to check results
-  echo "${result_array[$((iter))]} index $iter after normalization"
-  echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
+  # echo "${result_array[$((iter))]} index $iter after normalization"
+  # echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
 
   iter=$((iter+4))
 done
