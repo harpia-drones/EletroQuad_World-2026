@@ -129,10 +129,10 @@ while [ $index_struct -lt $structure_count ]; do
   y=${result_array[$((iter+1))]}
   yaw=${result_array[$((iter+2))]}
 
-  manometer_edit="<pose degrees='true'>$x $y 0.86 0 0 -90</pose> ${manometer_lines[$index_struct]}"
+  manometer_edit="        <pose degrees='true'>$x $y 0.86 0 0 -90</pose> ${manometer_lines[$index_struct]}"
 
   x_offset=$(mawk "BEGIN {printf \"%.4f\", $x + 0.009}")
-  pointer_edit="<pose degrees='true'>$x_offset $y 0.861 0 0 $yaw</pose> ${pointer_lines[$index_struct]}"
+  pointer_edit="        <pose degrees='true'>$x_offset $y 0.861 0 0 $yaw</pose> ${pointer_lines[$index_struct]}"
 
   sed -i -e "${line}s|.*|${manometer_edit}|" -e "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
 
