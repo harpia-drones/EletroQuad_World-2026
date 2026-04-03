@@ -5,20 +5,19 @@ set -e
 # VARIABLES
 # =========================
 
-declare -i structure_count=3
-declare -i decimal_places_precision=1000
-declare -i min_distance_padding=1
+declare -i -r structure_count=3
+declare -i -r decimal_places_precision=1000
+declare -i -r min_distance_padding=2
+declare -i -r max_distance_padding=63
+declare -i -r arena_width=7
+declare -i -r arena_length=13
 declare -i max_iters=$((4*structure_count))
-declare -i arena_width=7
-declare -i arena_length=13
 
-declare -a min_valid_angle_array=("0" "297" "231" "176" "114")
-declare -a max_valid_angle_array=("327" "266" "210" "145" "91")
-
-declare -a manometer_value_cap=("20" "40" "60" "80" "100")
-declare -a manometer_lines=("<!--line 24-->" "<!--line 35-->" "<!--line 46-->")
-declare -a pointer_lines=("<!--line 29-->" "<!--line 40-->" "<!--line 51-->")
-
+declare -a -r min_valid_angle_array=("0" "297" "231" "176" "114")
+declare -a -r max_valid_angle_array=("327" "266" "210" "145" "91")
+declare -a -r manometer_value_cap=("20" "40" "60" "80" "100")
+declare -a -r manometer_lines=("<!--line 24-->" "<!--line 35-->" "<!--line 46-->")
+declare -a -r pointer_lines=("<!--line 29-->" "<!--line 40-->" "<!--line 51-->")
 declare -a result_array=()
 
 # =========================
@@ -54,17 +53,17 @@ while [ $iter -lt $max_iters ]; do
 
   # valida distância com pontos anteriores
   valid=1
-  idx=0
-  while [ $idx -lt ${#result_array[@]} ]; do
-    dx=$((x - result_array[idx]))
-    dy=$((y - result_array[idx+1]))
+  index=0
+  while [ $index -lt ${#result_array[@]} ]; do
+    dx=$((x - result_array[index]))
+    dy=$((y - result_array[index+1]))
     dist=$((dx*dx + dy*dy))
 
-    if [ $dist -lt $((min_distance_padding * decimal_places_precision)) ]; then
+    if [ $dist -lt $((min_distance_padding * decimal_places_precision)) ] && [ $dist -ge $((max_distance_padding * decimal_places_precision)) ]; then
       valid=0
       break
     fi
-    idx=$((idx+4))
+    index=$((index+4))
   done
 
   if [ $valid -eq 0 ]; then
@@ -73,15 +72,20 @@ while [ $iter -lt $max_iters ]; do
 
   # salva posição (centralizada)
   result_array+=($((x - (arena_width * decimal_places_precision / 2))))
+  echo "${result_array[$((iter))]} x coord"
   result_array+=($((y - (arena_length * decimal_places_precision / 2))))
+  echo "${result_array[$((iter+1))]} y coord"
 
   # ângulo
   interval_chosen=$(RNG_within_range 1 4)
   angle=$(RNG_within_range ${min_valid_angle_array[$interval_chosen]} ${max_valid_angle_array[$interval_chosen]})
   result_array+=($((angle % 360)))
+  echo "${result_array[$((iter+2))]} pointer angle"
 
   # value cap
   result_array+=(${manometer_value_cap[$interval_chosen]})
+  echo "${result_array[$((iter+3))]} manometer value cap
+  "
 
   iter=$((iter+4))
 done
@@ -89,9 +93,20 @@ done
 # =========================
 # NORMALIZA VALORES
 # =========================
+declare -i iter=0
 
-for ((i=0; i<${#result_array[@]}; i++)); do
-  result_array[$i]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$i]} / $decimal_places_precision}")
+until [ $iter -ge ${#result_array[@]} ]; do
+
+  echo "${result_array[$((iter))]} index $iter before normalization"
+  result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$iter]} / $decimal_places_precision}")
+  echo "${result_array[$((iter))]} index $iter after normalization"
+
+  echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
+  result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$((iter+1))]} / $decimal_places_precision}")
+  echo "${result_array[$((iter+1))]} index $((iter+1)) after normalization
+  "
+
+  iter=$((iter+4))
 done
 
 # =========================
@@ -102,24 +117,25 @@ cd /root/PX4-Autopilot/Tools/simulation/gz/worlds
 
 iter=0
 line=24
-idx_struct=0
+index_struct=0
 
-while [ $idx_struct -lt $structure_count ]; do
+while [ $index_struct -lt $structure_count ]; do
 
   x=${result_array[$iter]}
   y=${result_array[$((iter+1))]}
   yaw=${result_array[$((iter+2))]}
 
-  manometer_edit="<pose degrees='true'>$x $y 0.86 0 0 -90</pose> ${manometer_lines[$idx_struct]}"
+  manometer_edit="<pose degrees='true'>$x $y 0.86 0 0 -90</pose> ${manometer_lines[$index_struct]}"
 
   x_offset=$(mawk "BEGIN {printf \"%.4f\", $x + 0.009}")
-  pointer_edit="<pose degrees='true'>$x_offset $y 0.861 0 0 $yaw</pose> ${pointer_lines[$idx_struct]}"
+  pointer_edit="<pose degrees='true'>$x_offset $y 0.861 0 0 $yaw</pose> ${pointer_lines[$index_struct]}"
 
-  sed -i "${line}s|.*|${manometer_edit}|" "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
+  sed -i "${line}s|.*|${manometer_edit}|" eletroquad26_m3.sdf
+  sed -i "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
 
   iter=$((iter+4))
   line=$((line+11))
-  idx_struct=$((idx_struct+1))
+  index_struct=$((index_struct+1))
 
 done
 
