@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-
 # =========================
 # VARIABLES
 # =========================
@@ -21,14 +20,12 @@ declare -a -r manometer_lines=("<!--line 24-->" "<!--line 35-->" "<!--line 46-->
 declare -a -r pointer_lines=("<!--line 29-->" "<!--line 40-->" "<!--line 51-->")
 declare -a result_array=()
 
-
 if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && tput colors >/dev/null 2>&1; then
   RED='\033[31;1m'
   YELLOW='\033[33;1m'
   YELLOW_BG='\033[33;7m'
   GREEN='\033[92;1m'
   NC='\033[0m'
-
 else
   RED=''
   YELLOW=''
@@ -36,7 +33,6 @@ else
   GREEN=''
   NC=''
 fi
-
 
 # =========================
 # FUNCTIONS
