@@ -10,7 +10,7 @@ declare -i -r decimal_places_precision=1000
 declare -i -r min_distance_padding=60
 declare -i -r arena_width=6
 declare -i -r arena_length=12
-declare -i iter=0
+declare -i -r tuple_size=2
 declare -i max_iters=$((2*structure_count))
 
 declare -a -r aruco_shapes=("hexagon" "star" "triangle")
@@ -62,7 +62,7 @@ while [ $iter -lt $max_iters ]; do
       valid=0
       break
     fi
-    index=$((index+2))
+    index=$((index+tuple_size))
   done
 
   if [ $valid -eq 0 ]; then
@@ -75,12 +75,13 @@ while [ $iter -lt $max_iters ]; do
   # echo "${result_array[$((iter))]} x coord"
   # echo -e "${result_array[$((iter+1))]} y coord\n"
 
-  iter=$((iter+2))
+  iter=$((iter+tuple_size))
 done
 
 # =========================
 # NORMALIZA VALORES
 # =========================
+
 iter=0
 
 until [ $iter -ge ${#result_array[@]} ]; do
@@ -96,7 +97,7 @@ until [ $iter -ge ${#result_array[@]} ]; do
   # echo "${result_array[$((iter))]} index $iter after normalization"
   # echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
 
-  iter=$((iter+2))
+  iter=$((iter+tuple_size))
 done
 
 # =========================
@@ -117,7 +118,7 @@ while [ $index_struct -lt $((structure_count-1)) ]; do
 
   sed -i -e "${lines}s|.*|${platform_edit}|" -e "$((lines+5))s|.*|${shape_edit}|" -e "$((lines+10))s|.*|${num_edit}|" eletroquad26_m1.sdf
 
-  iter=$((iter+2))
+  iter=$((iter+tuple_size))
   lines=$((lines+16))
   index_struct=$((index_struct+1))
 
