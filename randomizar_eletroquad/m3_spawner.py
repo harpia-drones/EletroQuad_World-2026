@@ -4,8 +4,10 @@ import os
 
 def randomize_poses():
 
-  iter_length = 3 # número de plataformas a serem criadas
-  padding = 1 # número que define a distância euclidiana mínima entre as plataformas
+  padding = 1
+  iter_amount = 10
+  arena_length = 7
+  arena_width = 13
 
   valid_angles = [90, 57, 27, 356, 321, 300, 266, 235, 204, 181]
   interval_chosen = []
@@ -23,8 +25,8 @@ def randomize_poses():
   for i in range(iter_length): # loop para criar os manômetros
     indexes.append(i+1)
     while True: # loop que garante que todas os manômetros estão a uma distância euclidiana mínima entre si
-      chosen_x = round(random.uniform(0, 7) - (7/2), 8)
-      chosen_y = round(random.uniform(0, 13) - (13/2), 8)
+      chosen_x = round(random.uniform(0, arena_length) - (arena_length/2), 8)
+      chosen_y = round(random.uniform(0, arena_width) - (arena_width/2), 8)
       distance_flag = False
       for x, y in x_coords, y_coords:
         if pow(chosen_x - x, 2) + pow(chosen_y - y, 2) <= padding:

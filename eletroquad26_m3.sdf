@@ -20,34 +20,34 @@
 
     <!-- Manometros -->
     <model name='manometer1'>
-      <include merge='true'><uri>models/faulty_or_not/manometer</uri></include>
+      <include merge='true'><uri>models/eletroquad_26/faulty_or_not/manometer</uri></include>
       <pose degrees='true'>3 2 0.86 0 0 -90</pose> <!--line 24-->
       <static>true</static>
     </model>
     <model name='pointer1'>
-      <include merge='true'><uri>models/faulty_or_not/manometer_pointer</uri></include>
+      <include merge='true'><uri>models/eletroquad_26/faulty_or_not/manometer_pointer</uri></include>
       <pose degrees='true'>3.009 2 1.711 0 0 341</pose> <!--line 29-->
       <static>true</static>
     </model>
 
     <model name='manometer2'>
-      <include merge='true'><uri>models/faulty_or_not/manometer</uri></include>
+      <include merge='true'><uri>models/eletroquad_26/faulty_or_not/manometer</uri></include>
       <pose degrees='true'>-3 5 0.86 0 0 -90</pose> <!--line 35-->
       <static>true</static>
     </model>
     <model name='pointer2'>
-      <include merge='true'><uri>models/faulty_or_not/manometer_pointer</uri></include>
+      <include merge='true'><uri>models/eletroquad_26/faulty_or_not/manometer_pointer</uri></include>
       <pose degrees='true'>-2.991 5 1.711 0 0 218</pose> <!--line 40-->
       <static>true</static>
     </model>
 
     <model name='manometer3'>
-      <include merge='true'><uri>models/faulty_or_not/manometer</uri></include>
+      <include merge='true'><uri>models/eletroquad_26/faulty_or_not/manometer</uri></include>
       <pose degrees='true'>-2 -5 0.86 0 0 -90</pose> <!--line 46-->
       <static>true</static>
     </model>
     <model name='pointer3'>
-      <include merge='true'><uri>models/faulty_or_not/manometer_pointer</uri></include>
+      <include merge='true'><uri>models/eletroquad_26/faulty_or_not/manometer_pointer</uri></include>
       <pose degrees='true'>-1.991 -5 1.711 0 0 101</pose> <!--line 51-->
       <static>true</static>
     </model>
@@ -55,7 +55,7 @@
 
     <!-- Takeoff -->
     <include>
-      <uri>models/miscs/takeoff_platform</uri>
+      <uri>models/eletroquad_26/miscs/takeoff_platform</uri>
       <static>true</static>
       <pose degrees='true'>0 0 0.011 0 0 0</pose>
     </include>
@@ -63,7 +63,7 @@
 
     <!-- Arena -->
     <include>
-      <uri>models/miscs/arenas/rectangle</uri>
+      <uri>models/eletroquad_26/miscs/arenas/rectangle</uri>
       <static>true</static>
       <pose degrees='true'>0 0 0.01 0 0 0</pose>
     </include>
@@ -71,7 +71,7 @@
 
     <!-- Chao -->
     <include>
-      <uri>models/miscs/ground_level</uri>
+      <uri>models/eletroquad_26/miscs/ground_level</uri>
       <pose/>
     </include>
     <!-- Chao -->

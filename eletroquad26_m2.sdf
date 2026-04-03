@@ -20,7 +20,7 @@
 
     <!-- Bola pra Marcacao -->
     <model name='styro_ball'>
-      <include><uri>models/hang_the_right_wire/styro_ball</uri></include>
+      <include><uri>models/eletroquad_26/hang_the_right_wire/styro_ball</uri></include>
       <pose degrees='true'>3.23 0 1.65 0 0 0</pose> <!--line 24-->
       <static>true</static>
     </model>
@@ -28,33 +28,33 @@
 
     <!-- Linhas -->
     <model name='pole1'>
-      <include><uri>models/hang_the_right_wire/pole</uri></include>
+      <include><uri>models/eletroquad_26/hang_the_right_wire/pole</uri></include>
       <pose degrees='true'>3.23 3.23 0.85 0 0 0</pose> <!--line 32-->
       <static>true</static>
     </model>
     <model name='pole2'>
-      <include><uri>models/hang_the_right_wire/pole</uri></include>
+      <include><uri>models/eletroquad_26/hang_the_right_wire/pole</uri></include>
       <pose degrees='true'>3.23 -3.23 0.85 0 0 0</pose> <!--line 37-->
       <static>true</static>
     </model>
     <model name='hose1'>
-      <include><uri>models/hang_the_right_wire/hose</uri></include>
+      <include><uri>models/eletroquad_26/hang_the_right_wire/hose</uri></include>
       <pose degrees='true'>3.23 0 1.65 -90 0 0</pose> <!--line 42-->
       <static>true</static>
     </model>
 
     <model name='pole3'>
-      <include><uri>models/hang_the_right_wire/pole</uri></include>
+      <include><uri>models/eletroquad_26/hang_the_right_wire/pole</uri></include>
       <pose degrees='true'>-3.23 3.23 0.85 0 0 0</pose> <!--line 48-->
       <static>true</static>
     </model>
     <model name='pole4'>
-      <include><uri>models/hang_the_right_wire/pole</uri></include>
+      <include><uri>models/eletroquad_26/hang_the_right_wire/pole</uri></include>
       <pose degrees='true'>-3.23 -3.23 0.85 0 0 0</pose> <!--line 53-->
       <static>true</static>
     </model>
     <model name='hose2'>
-      <include><uri>models/hang_the_right_wire/hose</uri></include>
+      <include><uri>models/eletroquad_26/hang_the_right_wire/hose</uri></include>
       <pose degrees='true'>-3.23 0 1.65 -90 0 0</pose> <!--line 58-->
       <static>true</static>
     </model>
@@ -62,7 +62,7 @@
 
     <!-- Takeoff -->
     <include>
-      <uri>models/miscs/takeoff_platform</uri>
+      <uri>models/eletroquad_26/miscs/takeoff_platform</uri>
       <static>true</static>
       <pose degrees='true'>0 0 0.011 0 0 0</pose>
     </include>
@@ -70,7 +70,7 @@
     
     <!-- Arena -->
     <include>
-      <uri>models/miscs/arenas/circle</uri>
+      <uri>models/eletroquad_26/miscs/arenas/circle</uri>
       <static>true</static>
       <pose degrees='true'>0 0 0.01 0 0 0</pose>
     </include>
@@ -78,7 +78,7 @@
 
     <!-- Chao -->
       <include>
-        <uri>models/miscs/ground_level</uri>
+        <uri>models/eletroquad_26/miscs/ground_level</uri>
         <pose/>
       </include>
     <!-- Chao -->
