@@ -72,20 +72,22 @@ while [ $iter -lt $max_iters ]; do
 
   # salva posição (centralizada)
   result_array+=($((x - (arena_width * decimal_places_precision / 2))))
-  echo "${result_array[$((iter))]} x coord"
   result_array+=($((y - (arena_length * decimal_places_precision / 2))))
-  echo "${result_array[$((iter+1))]} y coord"
 
   # ângulo
   interval_chosen=$(RNG_within_range 1 4)
   angle=$(RNG_within_range ${min_valid_angle_array[$interval_chosen]} ${max_valid_angle_array[$interval_chosen]})
   result_array+=($((angle % 360)))
-  echo "${result_array[$((iter+2))]} pointer angle"
 
   # value cap
   result_array+=(${manometer_value_cap[$interval_chosen]})
-  echo "${result_array[$((iter+3))]} manometer value cap
-  "
+  # result_array+=(${manometer_value_cap[$(RNG_within_range 0 4)]})
+  
+  # uncomment to check results
+  # echo "${result_array[$((iter))]} x coord"
+  # echo "${result_array[$((iter+1))]} y coord"
+  # echo "${result_array[$((iter+2))]} pointer angle"
+  # echo -e "${result_array[$((iter+3))]} manometer value cap\n"
 
   iter=$((iter+4))
 done
@@ -97,14 +99,16 @@ declare -i iter=0
 
 until [ $iter -ge ${#result_array[@]} ]; do
 
-  echo "${result_array[$((iter))]} index $iter before normalization"
-  result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$iter]} / $decimal_places_precision}")
-  echo "${result_array[$((iter))]} index $iter after normalization"
+  # uncomment to check results
+  # echo "${result_array[$((iter))]} index $iter before normalization"
+  # echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
 
-  echo "${result_array[$((iter+1))]} index $((iter+1)) before normalization"
+  result_array[$iter]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$iter]} / $decimal_places_precision}")
   result_array[$((iter+1))]=$(mawk "BEGIN {printf \"%.4f\", ${result_array[$((iter+1))]} / $decimal_places_precision}")
-  echo "${result_array[$((iter+1))]} index $((iter+1)) after normalization
-  "
+  
+  # uncomment to check results
+  # echo "${result_array[$((iter))]} index $iter after normalization"
+  # echo -e "${result_array[$((iter+1))]} index $((iter+1)) after normalization\n"
 
   iter=$((iter+4))
 done
@@ -130,8 +134,7 @@ while [ $index_struct -lt $structure_count ]; do
   x_offset=$(mawk "BEGIN {printf \"%.4f\", $x + 0.009}")
   pointer_edit="<pose degrees='true'>$x_offset $y 0.861 0 0 $yaw</pose> ${pointer_lines[$index_struct]}"
 
-  sed -i "${line}s|.*|${manometer_edit}|" eletroquad26_m3.sdf
-  sed -i "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
+  sed -i -e "${line}s|.*|${manometer_edit}|" -e "$((line+5))s|.*|${pointer_edit}|" eletroquad26_m3.sdf
 
   iter=$((iter+4))
   line=$((line+11))
