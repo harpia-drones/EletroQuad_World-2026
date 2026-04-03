@@ -127,7 +127,6 @@ sed -i -e "${line}s|.*|${platform_edit}|" -e "$((line+5))s|.*|${shape_edit}|" -e
 
 # creates the actual aruco marker
 python3 << EOF
-import random
 import cv2
 import os
 abs_path = "/root/PX4-Autopilot/Tools/simulation/gz/worlds/models/eletroquad_26/bouncing/ArUco_marker/materials/textures"
