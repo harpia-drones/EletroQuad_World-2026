@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+
 # =========================
 # VARIABLES
 # =========================
@@ -20,12 +21,14 @@ declare -a -r manometer_lines=("<!--line 24-->" "<!--line 35-->" "<!--line 46-->
 declare -a -r pointer_lines=("<!--line 29-->" "<!--line 40-->" "<!--line 51-->")
 declare -a result_array=()
 
+
 if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && tput colors >/dev/null 2>&1; then
   RED='\033[31;1m'
   YELLOW='\033[33;1m'
   YELLOW_BG='\033[33;7m'
   GREEN='\033[92;1m'
   NC='\033[0m'
+
 else
   RED=''
   YELLOW=''
@@ -33,6 +36,7 @@ else
   GREEN=''
   NC=''
 fi
+
 
 # =========================
 # FUNCTIONS
@@ -143,9 +147,9 @@ done
 # =========================
 
 edit1="    manometer_1_position: [${result_array[0]}, ${result_array[1]}, -1.7]"
-edit2="    manometer_1_valuecap: ${result_array[3]}|"
+edit2="    manometer_1_valuecap: ${result_array[3]}"
 edit3="    manometer_2_position: [${result_array[4]}, ${result_array[5]}, -1.7]"
-edit4="    manometer_2_valuecap: ${result_array[7]}|"
+edit4="    manometer_2_valuecap: ${result_array[7]}"
 edit5="    manometer_3_position: [${result_array[8]}, ${result_array[9]}, -1.7]"
 edit6="    manometer_3_valuecap: ${result_array[11]}"
 
@@ -161,6 +165,6 @@ echo -e "${YELLOW}Construindo pacotes...${NC}"
 cd /root/harpia_ws
 colcon build --packages-up-to eletroquad_m3
 source /root/.bashrc
-echo -e "${GREEN}Posições dos manômeros randomizadas com sucesso!${NC}"
+echo -e "${GREEN}Posições dos manômeros alteradas com sucesso!${NC}"
 
-echo -e "Este script demorou ${GREEN}$SECONDS segundos${NC} para concluir."
+# echo -e "Este script demorou ${GREEN}$SECONDS segundos${NC} para concluir."
